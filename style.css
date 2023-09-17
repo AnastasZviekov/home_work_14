@@ -1,3 +1,46 @@
-.image {
-    url(images/users)
+
+.render_container {
+  max-width: 1200px;
+  background-color: #F5F5F5;
+  margin: 20px;
+  padding: 20px;
+
+
+}
+
+.role_render {
+margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.role{
+background-color: lavender;
+  padding:7px;
+display: inline-block;
+}
+
+
+.avatar_image{
+  width: 20%;
+
+}
+.role_name {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.role_image{
+  width: 36px;
+}
+
+.lector_block{
+  max-width: 220px;
+  background-color: lightcoral;
+}
+
+
+.admin_block{
+  max-width: 220px;
+  background-color: aquamarine;
 }

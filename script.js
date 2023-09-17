@@ -1,3 +1,5 @@
+// noinspection JSVoidFunctionReturnValueUsed
+
 const gradation = {
     20: "satisfactory",
     55: "good",
@@ -5,6 +7,13 @@ const gradation = {
     100: "excellent"
 };
 let studentRating;
+let adminRating;
+let lectorRating;
+let studentScore;
+let listofCourse;
+let subjectRating;
+let scoreLector;
+
 const users = [
     {
         name: "Jack Smith",
@@ -26,7 +35,13 @@ const users = [
         name: "Amal Smith",
         age: 20,
         img: "AmalSmith",
-        role: "student"
+        role: "student",
+        courses: [
+            {
+                "title": "Front-end Pro",
+                "mark": 50
+            }
+        ]
     },
     {
         name: "Noah Smith",
@@ -53,7 +68,7 @@ const users = [
             {
                 "title": "Java Enterprise",
                 "mark": 23
-            }]
+            } ]
     },
     {
         name: "Emily Smith",
@@ -75,7 +90,7 @@ const users = [
                 "title": "QA",
                 "score": 75,
                 "lector": "Emilie Smith"
-            }]
+            } ]
     },
     {
         name: "Leo Smith",
@@ -99,93 +114,179 @@ const users = [
 
 
 class User {
-    constructor(obj) {
-        Object.assign ( this, obj );
+    constructor (obj) {
+        Object.assign( this, obj );
     }
 
-    render() {
-        return document.write ( `<div class="image"><img src="images/users/${ this.img }.png"></div> <div>Name: ${ this.name }</div>  <div>Age: ${ this.age }</div> <div>${ this.role }</div> ` )
+    render () {
+        return `<div class="role_render"><div><div class="image"><img class="avatar_image" src="images/users/${ this.img }.png" alt="image"></div>
+ <div>Name: <strong>${ this.name }</strong></div>  <div>Age: <strong>${ this.age }</strong></div></div> <div> <span class="role">  <img class="role_image" src="images/roles/${this.role}.png">
+  <span class="role_name">${ this.role[0].toUpperCase()+this.role.slice(1) }</span> <span/> </span></div></div>`
     }
 
-    renderCourses() {
+
+    renderCourses () {
         if ( this.courses !== undefined ) {
-            this.courses.map ( course => {
-                console.log ( course );
-                return course.title})
+            listofCourse = this.courses.map( (course) => {
+                    if ( course.lector ) {
+                        return `<span>Title: ${course.title} Lector:${course.lector}<br></span>`;
+                    } else return `<span>Title: ${course.title}</span>`;
+                }
+            )
         }
+        return `<div> ${listofCourse}</div>`
     }
 }
 
-    class Student extends User {
-    constructor(obj) {
+class Student extends User {
+    constructor (obj) {
         super ( obj );
     }
-        getStudentLevel() {
-            if ( this.courses !== undefined ) {
-                this.courses.map ( course => {
-                        if ( course.mark < 50 && course.mark >= 20 ) {
-                            studentRating = `satisfied`
-                        }
-                        if ( course.mark > 50 && course.mark < 85 ) {
-                            studentRating = `good`
-                        }
-                        if ( course.mark > 85 && course.mark < 100 ) {
-                            studentRating = `very-good`
-                        }
-                        if ( course.mark === 100 ) {
-                            studentRating = `excellent`
-                        }
-                        return studentRating;
+
+    getStudentLevel () {
+        if ( this.courses !== undefined ) {
+            subjectRating=this.courses.map ( course => {
+                    if ( course.mark < 50 && course.mark >= 20 ) {
+                        studentRating = `<span style="color: red">satisfactory</span>`
                     }
-                )
-            }
-          }
-       }
+                    if ( course.mark > 50 && course.mark < 85 ) {
+                        studentRating = `<span style="color: darkviolet">good</span>`
+                    }
+                    if ( course.mark > 85 && course.mark < 100 ) {
+                        studentRating = `<span style="color: aquamarine">very-good</span>`
+                    }
+                    if ( course.mark === 100 ) {
+                        studentRating = `<span style="color: forestgreen">excellent</span>`
+                    }
+return studentRating;
+                }
+            )
+        }return subjectRating;
+    }
+}
 
 class Admin extends User {
-    constructor(obj) {
-        super (obj);
+    constructor (obj) {
+        super( obj );
+    }
+
+    renderCourses () {
+        let superRender = super.renderCourses();
+        return `${ superRender}`;
 
     }
 
+    getAdminLevel () {
+        if ( this.courses !== undefined ) {
+           subjectRating= this.courses.map ( course => {
+                    if ( course.score < 50 && course.score >= 10 ) {
+                        adminRating = `<span style="color: red">Admins score :satisfactory</span>`
+                    }
+                    if ( course.score > 50 && course.score < 85 ) {
+                        adminRating = `<span style="color: darkviolet">Admins score :good</span>`
+                    }
+                    if ( course.score > 85 && course.score < 100 ) {
+                        adminRating =  `<span style="color: aquamarine">Admins score :very-good</span>`
+                    }
+                    if ( course.score === 100 ) {
+                        adminRating = `<span style="color: forestgreen">Admins score :excellent</span>`
+                    }
+               return adminRating;
+
+                }
+            )
+        } return subjectRating;
+    }
 }
 
 class Lector extends User {
-    constructor(obj) {
-        super (obj);
+    constructor (obj) {
+        super ( obj );
     }
-}
 
-let usersMap=users.map(obj=>{
-let user= new User(obj);
-    if (obj.role==="student") {
-        user=new Student(obj);
-}
-
-if (obj.role==="lector") {
-    user=new Lector(obj)
-}
-    if (obj.role==="admin") {
-        user=new Admin(obj)
+    getLectorLevel () {
+        if ( this.courses !== undefined ) {
+            subjectRating=this.courses.map ( course => {
+                    if ( course.score < 50 && course.score >= 20 ) {
+                        lectorRating = `<span style="color: red">Lectors score:satisfactory</span>`
+                    }
+                    if ( course.score > 50 && course.score < 85 ) {
+                        lectorRating = `<span style="color: darkviolet">Lectors score:good</span>`
+                    }
+                    if ( course.score > 85 && course.score < 100 ) {
+                        lectorRating =  `<span style="color: aquamarine">Lectors score:very-good</span>`
+                    }
+                    if ( course.score === 100 ) {
+                        lectorRating = `<span style="color: forestgreen">Lectors score:excellent</span>`
+                    }
+                return lectorRating
+                }
+            )
+        } return subjectRating;
     }
-    return user;
-}
-)
-    .map(user=>{
-        console.log(user)
-        return user
-    })
 
-    .forEach(user=> {
-       console.log(user.render());
-       console.log(user.renderCourses())
-        if(user.role===`student`) { console.log(user.getStudentLevel)
-            document.write(`${user.getStudentLevel()}`);
+
+    getStudentScore () {
+        if ( this.courses !== undefined ) {
+            scoreLector=this.courses.map ( course => {
+                    if ( course.studentsScore < 50 && course.studentsScore >= 20 ) {
+                        studentScore = `<span style="color: red">Average Students score:satisfactory</span>`
+                    }
+                    if ( course.studentsScore > 50 && course.studentsScore < 85 ) {
+                        studentScore = `<span style="color: darkviolet">Average Students score:good</span>`
+                    }
+                    if ( course.studentsScore > 85 && course.studentsScore < 100 ) {
+                        studentScore =  `<span style="color: aquamarine">Average Students score:very-good</span>`
+                    }
+                    if ( course.studentsScore === 100 ) {
+                        studentScore = `<span style="color: forestgreen">Average Students score:excellent</span>`
+                    }
+                    return studentScore
+                }
+            )
+        } console.log(scoreLector)
+        return scoreLector;
+    }
+
+}
+let user;
+// noinspection JSVoidFunctionReturnValueUsed
+let usersMap=users.map ( obj => {
+        user = new User ( obj );
+        if ( obj.role === "student" ) {
+            user = new Student ( obj );
         }
-    })
+
+        if ( obj.role === "lector" ) {
+            user = new Lector ( obj );
+        }
+        if ( obj.role === "admin" ) {
+            user = new Admin ( obj );
+        }return user;
+    }
+)
+    .map ( user => {
+        console.log ( user )
+        return user
+    } )
+    .forEach( user => {
+        /*document.write( `${ user.render() }` );*/
+        // noinspection JSUnresolvedReference
+        if ( user.role === `lector` ) {
+            document.write( `<div class="render_container">${ user.render() } <div class="lector_block"> ${ user.renderCourses() } ${ user.getLectorLevel()} <br>${user.getStudentScore()}</></div>`);
+        }
+        if ( user.role === `student` ) {
+            document.write( `<div class="render_container"> ${ user.render() } ${ user.renderCourses() } ${ user.getStudentLevel()}</div>` );
+        }
+        if ( user.role === `admin` ) {
+            document.write( `<div class="render_container"> ${ user.render() } <div class="admin_block">${ user.renderCourses() }${ user.getAdminLevel()}</div></div>` )
+        }
+    } )
+
+console.log ( usersMap )
 
 
-console.log(usersMap)
+
 
 
 
